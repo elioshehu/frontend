@@ -1,0 +1,71 @@
+<div class="container mt-4">
+  <h1>Create Shitës</h1>
+  <div class="card">
+
+    <form>
+
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" [ngModel]="username" [ngModelOptions]="{standalone: true}" class="form-control"
+               id="username" name="username" placeholder="Enter Name">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="text" [ngModel]="email" [ngModelOptions]="{standalone: true}" class="form-control"
+               id="email" name="email" placeholder="Enter Email">
+      </div>
+
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="text" [ngModel]="password" [ngModelOptions]="{standalone: true}" class="form-control"
+               id="password" name="password" placeholder="Enter password">
+      </div>
+
+
+      <div class="form-group">
+        <label>Active</label>
+        <input type="checkbox" [ngModel]="username" [ngModelOptions]="{standalone: true}"
+               id="is_active" name="is_active">
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-4" (click)="createShites()">Save</button> &nbsp;
+      <button type="submit" class="btn btn-warning mt-4" (click)="updateShites()">Update</button>
+    </form>
+  </div>
+</div>
+
+<div>
+  <div class="container mt-4">
+    <h1>Shitësa</h1>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Group</th>
+        <th scope="col">Active</th>
+        <th scope="col">Option</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let Shites of ShitesArray">
+
+        <td>{{Shites.username}}</td>
+        <td>{{Shites.email }}</td>
+        <td>{{Shites.groups_name[0].name }}</td>
+        <td>{{Shites.is_active }}</td>
+
+        <td>
+          <button type="button" class="btn btn-success" (click)="setUpdate(Shites)">Edit</button>
+          <!--          <button type="button" class="btn btn-danger" (click)="deleteShites(Shites)">Delete</button>-->
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+
+
+  </div>
+</div>

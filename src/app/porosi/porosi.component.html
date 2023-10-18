@@ -1,0 +1,100 @@
+<div class="container mt-4">
+  <h1>Create Order</h1>
+  <div class="card">
+
+    <form>
+
+      <div class="form-group">
+        <label>Customer</label>
+        <select [(ngModel)]="customer" ngDefaultControl [ngModelOptions]="{standalone: true}" id="customer"
+                name="customer">
+          <option *ngFor="let Client of ClientArray" [ngValue]="Client.id">{{Client.first_name}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Creator</label>
+        <select [(ngModel)]="creator" ngDefaultControl [ngModelOptions]="{standalone: true}" id="creator"
+                name="creator">
+          <option *ngFor="let Creator of CreatorArray" [ngValue]="Creator.id">{{Creator.username}}</option>
+        </select>
+      </div>
+
+
+      <div class="form-group">
+        <label>Product</label>
+        <select [(ngModel)]="product" ngDefaultControl [ngModelOptions]="{standalone: true}" id="units" name="units">
+          <option *ngFor="let product of ProductArray" [value]="product.id">{{product.name}}</option>
+        </select>
+      </div>
+
+
+      <!--      <div class="form-group">-->
+      <!--        <label>Product</label>-->
+      <!--        <mat-form-field>-->
+      <!--          <mat-select multiple [(ngModel)]="units" ngDefaultControl [ngModelOptions]="{standalone: true}" id="units" name="units">-->
+      <!--            <mat-option *ngFor="let Product of ProductArray" [value]="Product">{{Product.name}}</mat-option>-->
+      <!--          </mat-select>-->
+      <!--        </mat-form-field>-->
+      <!--      </div>-->
+
+
+      <div class="form-group">
+        <label>Amount</label>
+        <input type="number" [(ngModel)]="amount" [ngModelOptions]="{standalone: true}" class="form-control"
+               id="amount" name="amount" placeholder="Enter Amount">
+      </div>
+
+
+      <div class="form-group">
+        <label>Price</label>
+        <input type="number" [(ngModel)]="price" [ngModelOptions]="{standalone: true}" class="form-control"
+               id="price" name="price" placeholder="Enter Price">
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-4" (click)="createPorosi()">Save</button> &nbsp;
+      <button type="submit" class="btn btn-warning mt-4" (click)="updatePorosi()">Update</button>
+    </form>
+  </div>
+</div>
+
+<div>
+  <div class="container mt-4">
+    <h1>Orders</h1>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Customer</th>
+        <th scope="col">Creator</th>
+        <th scope="col">Product</th>
+        <th scope="col">Price</th>
+        <th scope="col">Amount</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let Porosi of PorosiArray">
+
+        <td>{{Porosi.customer}}</td>
+        <td>{{Porosi.creator }}</td>
+        <td>
+          <div *ngFor="let unit of Porosi.units">{{unit.name}}</div>
+        </td>
+        <td>
+          <div *ngFor="let unit of Porosi.units">{{unit.price }}</div>
+        </td>
+        <td>
+          <div *ngFor="let unit of Porosi.units">{{unit.amount }}</div>
+        </td>
+
+        <td>
+          <button type="button" class="btn btn-success" (click)="setUpdate(Porosi)">Edit</button>
+          <button type="button" class="btn btn-danger" (click)="deletePorosi(Porosi)">Delete</button>
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+
+
+  </div>
+</div>

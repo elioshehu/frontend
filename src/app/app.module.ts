@@ -1,16 +1,46 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {ShitesComponent} from './shites/shites.component';
+import {KlientComponent} from './klient/klient.component';
+import {ProdukteComponent} from './produkte/produkte.component';
+import {PorosiComponent} from './porosi/porosi.component';
+import {RouterOutlet} from "@angular/router";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {AppRoutingModule} from './app-routing.module';
+import {LoginComponent} from './login/login.component';
+import {AuthInterceptor} from "./interceptor";
+import {MatSelectModule} from "@angular/material/select";
+import {UniquePipe} from "./unique.pipe";
+import {provideAnimations} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ShitesComponent,
+    KlientComponent,
+    ProdukteComponent,
+    PorosiComponent,
+    LoginComponent,
+    UniquePipe
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule,
+    RouterOutlet,
+    FormsModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    MatSelectModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    UniquePipe,
+    provideAnimations()
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

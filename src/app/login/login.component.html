@@ -1,0 +1,13 @@
+<h1>Login</h1>
+
+<form>
+  <div>
+    <label>Username</label>
+    <input type="text" [(ngModel)]="username" [ngModelOptions]="{standalone: true}" id="username" name="username" placeholder="Enter Name">
+  </div>
+  <div>
+    <label>Password</label>
+    <input type="password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}" id="password" name="password" placeholder="Enter Name">
+  </div>
+  <button type="submit" (click)="login()">Login</button>
+</form>

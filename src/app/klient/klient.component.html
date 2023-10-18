@@ -1,0 +1,61 @@
+<div class="container mt-4">
+  <h1>Create Client</h1>
+  <div class="card">
+
+    <form>
+
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" [(ngModel)]="first_name" [ngModelOptions]="{standalone: true}" class="form-control"
+               id="first_name" name="first_name" placeholder="Enter First Name">
+      </div>
+
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" [(ngModel)]="last_name" [ngModelOptions]="{standalone: true}" class="form-control"
+               id="last_name" name="last_name" placeholder="Enter Last Name">
+      </div>
+
+
+      <div class="form-group">
+        <label>Company</label>
+        <input type="text" [(ngModel)]="company_name" [ngModelOptions]="{standalone: true}" class="form-control"
+               id="company_name" name="company_name" placeholder="Enter Company Name">
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-4" (click)="createKlient()">Save</button> &nbsp;
+      <button type="submit" class="btn btn-warning mt-4" (click)="updateKlient()">Update</button>
+    </form>
+  </div>
+</div>
+
+<div>
+  <div class="container mt-4">
+    <h1>Clients</h1>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Company Name</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let Client of ClientArray">
+
+        <td>{{Client.first_name}}</td>
+        <td>{{Client.last_name }}</td>
+        <td>{{Client.company_name }}</td>
+
+        <td>
+          <button type="button" class="btn btn-success" (click)="setUpdate(Client)">Edit</button>
+          <button type="button" class="btn btn-danger" (click)="deleteKlient(Client)">Delete</button>
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+
+
+  </div>
+</div>
