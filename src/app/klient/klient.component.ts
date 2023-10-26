@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-klient',
@@ -7,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./klient.component.css']
 })
 export class KlientComponent {
+  clientFG: FormGroup = new FormGroup({})
   ClientArray: any[] = [];
 
   first_name: string = "";
@@ -14,17 +16,18 @@ export class KlientComponent {
   company_name: string = "";
   klientID = "";
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private fb: FormBuilder) {
     this.getAllKlient();
+    this.initClientForm();
   }
 
   createKlient() {
-    let data = {
-      "first_name": this.first_name,
-      "last_name": this.last_name,
-      "company_name": this.company_name
-    };
-    this.http.post("http://127.0.0.1:8000/customers/", data).subscribe((resultData: any) => {
+    // let data = {
+    //   "first_name": this.first_name,
+    //   "last_name": this.last_name,
+    //   "company_name": this.company_name
+    // };
+    this.http.post("http://127.0.0.1:8000/customers/", this.clientFG.value).subscribe((resultData: any) => {
       console.log(resultData);
       alert("Sukses");
       this.getAllKlient();
@@ -39,24 +42,25 @@ export class KlientComponent {
   }
 
   setUpdate(data: any) {
-    this.first_name = data.first_name
-    this.last_name = data.last_name
-    this.company_name = data.company_name
-    this.klientID = data.id
+    // this.first_name = data.first_name
+    // this.last_name = data.last_name
+    // this.company_name = data.company_name
+    // this.klientID = data.id
+    this.clientFG.patchValue(data)
   }
 
   updateKlient() {
-    let data = {
-      "first_name": this.first_name,
-      "last_name": this.last_name,
-      "company_name": this.company_name
-    }
-    this.http.put("http://127.0.0.1:8000/customers/" + this.klientID, data).subscribe((resultData: any) => {
+    // let data = {
+    //   "first_name": this.first_name,
+    //   "last_name": this.last_name,
+    //   "company_name": this.company_name
+    // }
+    this.http.put("http://127.0.0.1:8000/customers/" + this.clientFG.get("id")?.value, this.clientFG.value).subscribe((resultData: any) => {
       console.log(resultData);
       alert("Sukses")
-      this.first_name = ''
-      this.last_name = ''
-      this.company_name = ''
+      // this.first_name = ''
+      // this.last_name = ''
+      // this.company_name = ''
       this.getAllKlient();
     })
   }
@@ -66,6 +70,15 @@ export class KlientComponent {
       console.log(resultData);
       alert("Sukses")
       this.getAllKlient();
+    })
+  }
+
+  initClientForm(){
+    this.clientFG = this.fb.group({
+      first_name: new FormControl(null),
+      last_name: new FormControl(null),
+      company_name: new FormControl(null),
+      id: new FormControl(null)
     })
   }
 }

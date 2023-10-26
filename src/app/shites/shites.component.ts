@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject} from "rxjs";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-shites',
@@ -17,7 +17,7 @@ export class ShitesComponent {
   //   is_active: new FormControl(''),
   //   shitesID: new FormControl('')
   // })
-
+  shitesFG: FormGroup = new FormGroup({})
   ShitesArray: any[] = [];
 
   username: string = "";
@@ -26,24 +26,25 @@ export class ShitesComponent {
   is_active: boolean = true;
   shitesID = "";
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private fb: FormBuilder) {
     this.getAllShites();
+    this.initShitesForm();
   }
 
   createShites() {
-    let data = {
-      "username": this.username,
-      "email": this.email,
-      "password": this.password,
-      "is_active": this.is_active
-    };
-    this.http.post("http://127.0.0.1:8000/users/Shites", data).subscribe((resultData: any) => {
+    // let data = {
+    //   "username": this.username,
+    //   "email": this.email,
+    //   "password": this.password,
+    //   "is_active": this.is_active
+    // };
+    this.http.post("http://127.0.0.1:8000/users/Shites", this.shitesFG.value).subscribe((resultData: any) => {
       console.log(resultData);
       alert("Sukses");
-      this.username = '';
-      this.email = '';
-      this.password = '';
-      this.is_active = true;
+      // this.username = '';
+      // this.email = '';
+      // this.password = '';
+      // this.is_active = true;
       this.getAllShites();
     });
   }
@@ -56,27 +57,28 @@ export class ShitesComponent {
   }
 
   setUpdate(data: any) {
-    this.username = data.username
-    this.email = data.email
-    this.password = data.password
-    this.is_active = data.is_active
-    this.shitesID = data.id
+    // this.username = data.username
+    // this.email = data.email
+    // this.password = data.password
+    // this.is_active = data.is_active
+    // this.shitesID = data.id
+    this.shitesFG.patchValue(data)
   }
 
   updateShites() {
-    let data = {
-      "username": this.username,
-      "email": this.email,
-      "password": this.password,
-      "is_active": this.is_active
-    }
-    this.http.put("http://127.0.0.1:8000/users/ShitesUpdate/" + this.shitesID, data).subscribe((resultData: any) => {
+    // let data = {
+    //   "username": this.username,
+    //   "email": this.email,
+    //   "password": this.password,
+    //   "is_active": this.is_active
+    // }
+    this.http.put("http://127.0.0.1:8000/users/ShitesUpdate/" + this.shitesFG.get("id")?.value, this.shitesFG.value).subscribe((resultData: any) => {
       console.log(resultData);
       alert("Sukses")
-      this.username = '';
-      this.email = '';
-      this.password = '';
-      this.is_active = true;
+      // this.username = '';
+      // this.email = '';
+      // this.password = '';
+      // this.is_active = true;
       this.getAllShites();
     })
   }
@@ -86,6 +88,16 @@ export class ShitesComponent {
       console.log(resultData);
       alert("Sukses")
       this.getAllShites();
+    })
+  }
+
+  initShitesForm(){
+    this.shitesFG = this.fb.group({
+      username: new FormControl(null),
+      email: new FormControl(null),
+      password: new FormControl(null),
+      is_active: new FormControl(true),
+      id: new FormControl(null),
     })
   }
 }

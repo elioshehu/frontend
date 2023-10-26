@@ -16,9 +16,12 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    let token: any = ''
     // @ts-ignore
-    const token = JSON.parse(localStorage.getItem("currentUser")).access
-
+    if (JSON.parse(localStorage.getItem("currentUser"))) {
+      // @ts-ignore
+      token = JSON.parse(localStorage.getItem("currentUser")).access
+    }
     if (!token) {
       return next.handle(req);
     }

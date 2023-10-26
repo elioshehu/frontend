@@ -2,24 +2,24 @@
   <h1>Create Client</h1>
   <div class="card">
 
-    <form>
+    <form [formGroup]="clientFG">
 
       <div class="form-group">
         <label>First Name</label>
-        <input type="text" [(ngModel)]="first_name" [ngModelOptions]="{standalone: true}" class="form-control"
+        <input type="text" formControlName="first_name" class="form-control"
                id="first_name" name="first_name" placeholder="Enter First Name">
       </div>
 
       <div class="form-group">
         <label>Last Name</label>
-        <input type="text" [(ngModel)]="last_name" [ngModelOptions]="{standalone: true}" class="form-control"
+        <input type="text" formControlName="last_name" class="form-control"
                id="last_name" name="last_name" placeholder="Enter Last Name">
       </div>
 
 
       <div class="form-group">
         <label>Company</label>
-        <input type="text" [(ngModel)]="company_name" [ngModelOptions]="{standalone: true}" class="form-control"
+        <input type="text" formControlName="company_name" class="form-control"
                id="company_name" name="company_name" placeholder="Enter Company Name">
       </div>
 

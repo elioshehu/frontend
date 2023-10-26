@@ -15,6 +15,10 @@ import {AuthInterceptor} from "./interceptor";
 import {MatSelectModule} from "@angular/material/select";
 import {UniquePipe} from "./unique.pipe";
 import {provideAnimations} from "@angular/platform-browser/animations";
+import {MatInputModule} from "@angular/material/input";
+import {MatIconModule} from "@angular/material/icon";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   declarations: [
@@ -33,7 +37,11 @@ import {provideAnimations} from "@angular/platform-browser/animations";
     FormsModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatInputModule,
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
