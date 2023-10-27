@@ -55,7 +55,7 @@
               <mat-form-field>
                 <mat-label>Product</mat-label>
                 <mat-select formControlName="product">
-                  <mat-option *ngFor="let product of productArray" [value]="product.id">
+                  <mat-option *ngFor="let product of productArray" [value]="product.id" (click)="getPrice(product, i)">
                     {{product.name}}
                   </mat-option>
                 </mat-select>
@@ -84,6 +84,10 @@
               </mat-form-field>
               <!--          <input type="number" [(ngModel)]="price" [ngModelOptions]="{standalone: true}" class="form-control"-->
               <!--                 id="price" name="price" placeholder="Enter Price">-->
+              <mat-form-field>
+                <mat-label>Sub Total</mat-label>
+                <input matInput formControlName="subTotal">
+              </mat-form-field>
               <button type="submit" class="btn btn-danger" style="cursor: pointer" (click)="removeUnits(i)">-</button>
             </div>
           </div>

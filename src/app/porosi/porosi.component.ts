@@ -207,4 +207,8 @@ export class PorosiComponent {
     }, 0);
     this.orderFG.get('total')?.setValue(total);
   }
+
+  getPrice(product: any, index: number){
+    this.units.at(index).get('price')?.setValue(product.default_price)
+  }
 }
