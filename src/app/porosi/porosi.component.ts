@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {formatDate} from "@angular/common";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-porosi',
@@ -11,27 +12,28 @@ import {formatDate} from "@angular/common";
 export class PorosiComponent {
 
   orderFG: FormGroup = new FormGroup({})
-  orderArray: any[] = [];
+  // orderArray: any[] = [];
   clientArray: any[] = []
-  creatorArray: any[] = []
+  // creatorArray: any[] = []
   productArray: any[] = []
 
-  customer: string = "";
-  creator: string = "";
-  // units: any [] = [];
-  product: any = "";
-  amount: number = 0;
-  price: number = 0;
-  porosiID = "";
+  porosiID?: number;
+  update: boolean = false;
 
   url = "http://127.0.0.1:8000/orders/"
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {
-    this.getAllPorosi(this.url);
+  constructor(private http: HttpClient, private fb: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router) {
     this.getAllClient()
-    this.getAllCreator()
     this.getAllProduct()
     this.initOrderForm()
+  }
+
+  ngOnInit() {
+    this.porosiID = Number(this.activatedRoute.snapshot.paramMap.get('id'))
+    if (this.porosiID) {
+      this.update = true
+      this.setUpdate(this.porosiID)
+    }
   }
 
   getUnitsFA() {
@@ -44,7 +46,7 @@ export class PorosiComponent {
 
   removeUnits(index: number) {
     this.getUnitsFA().removeAt(index)
-    this.onChange(index-1)
+    this.onChange(index - 1)
   }
 
   initOrderForm() {
@@ -59,7 +61,7 @@ export class PorosiComponent {
     })
   }
 
-  get units(){
+  get units() {
     return this.orderFG.get('units') as FormArray
   }
 
@@ -73,52 +75,24 @@ export class PorosiComponent {
   }
 
   createPorosi() {
-    // console.log(this.orderFG.value)
-    this.orderFG.get("date_registered")?.setValue(formatDate(this.orderFG.get("date_registered")?.value, 'YYYY-MM-dd', 'en'))
-    this.http.post(this.url, this.orderFG.value).subscribe((resultData: any) => {
-      console.log(resultData)
-      alert("Sukses")
-      this.getAllPorosi(this.url)
-    })
-    // let data = {
-    //   "customer": this.customer,
-    //   "creator": this.creator,
-    //   "units": [this.product, this.amount, this.price]
-    //   // "amount": this.amount,
-    //   // "price": this.price
-    // };
-    // this.http.post(this.url, data).subscribe((resultData: any) => {
-    //   console.log(resultData);
-    //   alert("Sukses");
-    //   this.getAllPorosi(this.url);
-    // });
-  }
-
-  getAllPorosi(url: string) {
-    this.http.get(url).subscribe((resultData: any) => {
-      console.log(resultData)
-      if (this.orderArray === undefined) {
-        this.orderArray = resultData.results
-      } else {
-        this.orderArray = this.orderArray.concat(resultData.results)
-      }
-      if (resultData.next != null) {
-        this.getAllPorosi(resultData.next)
-      }
-    })
+    if (!this.update) {
+      this.orderFG.get("date_registered")?.setValue(formatDate(this.orderFG.get("date_registered")?.value, 'YYYY-MM-dd', 'en'))
+      this.http.post(this.url, this.orderFG.value).subscribe((resultData: any) => {
+        console.log(resultData)
+        alert("Sukses")
+      })
+    } else {
+      this.orderFG.get("date_registered")?.setValue(formatDate(this.orderFG.get("date_registered")?.value, 'YYYY-MM-dd', 'en'))
+      this.http.put("http://127.0.0.1:8000/ordersUpdate/" + this.orderFG.get('id')?.value, this.orderFG.value).subscribe((resultData: any) => {
+        console.log(resultData)
+      })
+    }
   }
 
   getAllClient() {
     this.http.get("http://127.0.0.1:8000/customers/").subscribe((resultData: any) => {
       console.log(resultData)
       this.clientArray = resultData.results
-    })
-  }
-
-  getAllCreator() {
-    this.http.get("http://127.0.0.1:8000/users/").subscribe((resultData: any) => {
-      console.log(resultData)
-      this.creatorArray = resultData.results
     })
   }
 
@@ -129,52 +103,14 @@ export class PorosiComponent {
     })
   }
 
-  setUpdate(data: any) {
-    this.orderFG.patchValue(data)
-    // this.orderFG.get("customer")?.setValue(data.customer)
-    // @ts-ignore
-    this.orderFG.get("creator")?.setValue(JSON.parse(localStorage.getItem("currentUser")).id)
-    data.units.forEach((unit: any) => {
-      this.patchUnitOnUpdate(unit)
-    })
-    // this.customer = data.customer
-    // this.creator = data.creator
-    // this.units = data.units
-    // this.amount = data.units.amount
-    // this.price = data.units.price
-    // this.porosiID = data.id
-  }
-
-  updatePorosi() {
-    this.orderFG.get("date_registered")?.setValue(formatDate(this.orderFG.get("date_registered")?.value, 'YYYY-MM-dd', 'en'))
-    this.http.put("http://127.0.0.1:8000/ordersUpdate/" + this.orderFG.get('id')?.value, this.orderFG.value).subscribe((resultData: any) => {
-      console.log(resultData)
-      this.getAllPorosi(this.url)
-    })
-    // let data = {
-    //   "customer": this.customer,
-    //   "creator": this.creator,
-    //   "units": this.units,
-    //   "amount": this.amount,
-    //   "price": this.price
-    // }
-    // this.http.put("http://127.0.0.1:8000/ordersUpdate/" + this.porosiID, data).subscribe((resultData: any) => {
-    //   console.log(resultData);
-    //   alert("Sukses")
-    //   this.customer = ''
-    //   this.creator = ''
-    //   this.units = []
-    //   this.amount = 0
-    //   this.price = 0
-    //   this.getAllPorosi(this.url);
-    // })
-  }
-
-  deletePorosi(data: any) {
-    this.http.delete("http://127.0.0.1:8000/ordersUpdate/" + data.id).subscribe((resultData: any) => {
-      console.log(resultData);
-      alert("Sukses")
-      this.getAllPorosi(this.url);
+  setUpdate(id: number) {
+    this.http.get(`http://127.0.0.1:8000/ordersUpdate/${id}`).subscribe((resultData: any) => {
+      this.orderFG.patchValue(resultData)
+      // @ts-ignore
+      this.orderFG.get("creator")?.setValue(JSON.parse(localStorage.getItem("currentUser")).id)
+      resultData.units.slice(1).forEach((unit: any) => {
+        this.patchUnitOnUpdate(unit)
+      })
     })
   }
 
@@ -186,12 +122,13 @@ export class PorosiComponent {
     return this.fb.group({
       product: new FormControl(unit.product),
       amount: new FormControl(unit.amount),
-      price: new FormControl(unit.price)
+      price: new FormControl(unit.price),
+      subTotal: new FormControl({value: 0, disabled: true})
     })
   }
 
   onChange(index: number) {
-    if(this.units.length === 0){
+    if (this.units.length === 0) {
       this.orderFG.get('total')?.setValue(0)
     }
     // @ts-ignore
@@ -208,7 +145,16 @@ export class PorosiComponent {
     this.orderFG.get('total')?.setValue(total);
   }
 
-  getPrice(product: any, index: number){
+  getPrice(product: any, index: number) {
     this.units.at(index).get('price')?.setValue(product.default_price)
+  }
+
+  goTo() {
+    let url = this.router.url.substring(0, this.router.url.indexOf("?"))
+    this.router.navigateByUrl(url + "porosiList")
+  }
+
+  resetForm() {
+    this.orderFG.reset()
   }
 }

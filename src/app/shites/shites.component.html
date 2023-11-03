@@ -31,41 +31,9 @@
       </div>
 
       <button type="submit" class="btn btn-primary mt-4" (click)="createShites()">Save</button> &nbsp;
-      <button type="submit" class="btn btn-warning mt-4" (click)="updateShites()">Update</button>
+      <button type="submit" class="btn btn-warning mt-4" (click)="resetForm()">Cancel</button>
     </form>
   </div>
+  <button (click)="goTo()">Go to List</button>
 </div>
 
-<div>
-  <div class="container mt-4">
-    <h1>Shitësa</h1>
-    <table class="table">
-      <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Email</th>
-        <th scope="col">Group</th>
-        <th scope="col">Active</th>
-        <th scope="col">Option</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let Shites of ShitesArray">
-
-        <td>{{Shites.username}}</td>
-        <td>{{Shites.email }}</td>
-        <td>{{Shites.groups_name[0].name }}</td>
-        <td>{{Shites.is_active }}</td>
-
-        <td>
-          <button type="button" class="btn btn-success" (click)="setUpdate(Shites)">Edit</button>
-          <!--          <button type="button" class="btn btn-danger" (click)="deleteShites(Shites)">Delete</button>-->
-        </td>
-      </tr>
-
-      </tbody>
-    </table>
-
-
-  </div>
-</div>

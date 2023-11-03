@@ -1,0 +1,46 @@
+<div>
+  <div class="container mt-4">
+    <h1>Orders</h1>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Customer</th>
+        <th scope="col">Creator</th>
+        <th scope="col">Product</th>
+        <th scope="col">Date Registered</th>
+        <th scope="col">Price</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Total</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let Porosi of orderArray">
+
+        <td>{{Porosi.customer}}</td>
+        <td>{{Porosi.creator }}</td>
+        <td>
+          <div *ngFor="let unit of Porosi.units">{{unit.name}}</div>
+        </td>
+        <td>{{Porosi.date_registered }}</td>
+        <td>
+          <div *ngFor="let unit of Porosi.units">{{unit.price }}</div>
+        </td>
+        <td>
+          <div *ngFor="let unit of Porosi.units">{{unit.amount }}</div>
+        </td>
+        <td>
+          <div *ngFor="let unit of Porosi.units">{{unit.amount * unit.price }}</div>
+        </td>
+
+        <td>
+          <button type="button" class="btn btn-success" (click)="goTo(Porosi.id)">Edit</button>
+          <button type="button" class="btn btn-danger" (click)="deletePorosi(Porosi)">Delete</button>
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+
+
+  </div>
+</div>

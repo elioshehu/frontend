@@ -19,6 +19,10 @@ import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import { PorosiListComponent } from './porosi-list/porosi-list.component';
+import { KlientListComponent } from './klient-list/klient-list.component';
+import { ProdukteListComponent } from './produkte-list/produkte-list.component';
+import { ShitesListComponent } from './shites-list/shites-list.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,11 @@ import {MatNativeDateModule} from "@angular/material/core";
     ProdukteComponent,
     PorosiComponent,
     LoginComponent,
-    UniquePipe
+    UniquePipe,
+    PorosiListComponent,
+    KlientListComponent,
+    ProdukteListComponent,
+    ShitesListComponent
   ],
   imports: [
     BrowserModule,

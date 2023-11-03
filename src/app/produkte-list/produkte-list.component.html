@@ -1,0 +1,30 @@
+<div>
+  <div class="container mt-4">
+    <h1>Products</h1>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Default Price</th>
+        <th scope="col">Description</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let Product of ProdukteArray">
+
+        <td>{{Product.name}}</td>
+        <td>{{Product.default_price }}</td>
+        <td>{{Product.description }}</td>
+
+        <td>
+          <button type="button" class="btn btn-success" (click)="goTo(Product.id)">Edit</button>
+          <button type="button" class="btn btn-danger" (click)="deleteProduct(Product)">Delete</button>
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+
+
+  </div>
+</div>

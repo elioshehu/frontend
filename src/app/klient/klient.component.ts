@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-klient',
@@ -11,65 +12,39 @@ export class KlientComponent {
   clientFG: FormGroup = new FormGroup({})
   ClientArray: any[] = [];
 
-  first_name: string = "";
-  last_name: string = "";
-  company_name: string = "";
-  klientID = "";
+  klientID?: number;
+  update: boolean = false;
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {
-    this.getAllKlient();
+  constructor(private http: HttpClient, private fb: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router) {
     this.initClientForm();
   }
 
+  ngOnInit() {
+    this.klientID = Number(this.activatedRoute.snapshot.paramMap.get('id'))
+    if (this.klientID) {
+      this.update = true
+      this.setUpdate(this.klientID)
+    }
+  }
+
   createKlient() {
-    // let data = {
-    //   "first_name": this.first_name,
-    //   "last_name": this.last_name,
-    //   "company_name": this.company_name
-    // };
-    this.http.post("http://127.0.0.1:8000/customers/", this.clientFG.value).subscribe((resultData: any) => {
-      console.log(resultData);
-      alert("Sukses");
-      this.getAllKlient();
-    });
+    if(!this.update) {
+      this.http.post("http://127.0.0.1:8000/customers/", this.clientFG.value).subscribe((resultData: any) => {
+        console.log(resultData);
+        alert("Sukses");
+      });
+    }
+    else{
+      this.http.put("http://127.0.0.1:8000/customers/" + this.clientFG.get("id")?.value, this.clientFG.value).subscribe((resultData: any) => {
+        console.log(resultData);
+        alert("Sukses")
+      })
+    }
   }
 
-  getAllKlient() {
-    this.http.get("http://127.0.0.1:8000/customers/").subscribe((resultData: any) => {
-      console.log(resultData)
-      this.ClientArray = resultData.results
-    })
-  }
-
-  setUpdate(data: any) {
-    // this.first_name = data.first_name
-    // this.last_name = data.last_name
-    // this.company_name = data.company_name
-    // this.klientID = data.id
-    this.clientFG.patchValue(data)
-  }
-
-  updateKlient() {
-    // let data = {
-    //   "first_name": this.first_name,
-    //   "last_name": this.last_name,
-    //   "company_name": this.company_name
-    // }
-    this.http.put("http://127.0.0.1:8000/customers/" + this.clientFG.get("id")?.value, this.clientFG.value).subscribe((resultData: any) => {
-      console.log(resultData);
-      alert("Sukses")
-      // this.first_name = ''
-      // this.last_name = ''
-      // this.company_name = ''
-      this.getAllKlient();
-    })
-  }
-
-  deleteKlient(data: any) {
-    this.http.delete("http://127.0.0.1:8000/customers/" + data.id).subscribe((resultData: any) => {
-      console.log(resultData);
-      alert("Sukses")
-      this.getAllKlient();
+  setUpdate(id: any) {
+    this.http.get(`http://127.0.0.1:8000/customers/${id}`).subscribe((resultData: any) => {
+      this.clientFG.patchValue(resultData)
     })
   }
 
@@ -80,5 +55,14 @@ export class KlientComponent {
       company_name: new FormControl(null),
       id: new FormControl(null)
     })
+  }
+
+  goTo(){
+    let url = this.router.url.substring(0,this.router.url.indexOf("?"))
+    this.router.navigateByUrl(url+"klientList")
+  }
+
+  resetForm(){
+    this.clientFG.reset()
   }
 }

@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-produkte',
@@ -11,27 +12,37 @@ export class ProdukteComponent {
   productFG: FormGroup = new FormGroup({})
   ProdukteArray: any[] = [];
 
-  name: string = "";
-  default_price: number = 0;
-  description: string = "";
-  produktID = "";
+  produktID?: number;
+  update: boolean = false;
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {
+  constructor(private http: HttpClient, private fb: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router) {
     this.getAllProduct();
     this.initProductForm();
   }
 
+  ngOnInit() {
+    this.produktID = Number(this.activatedRoute.snapshot.paramMap.get('id'))
+    if (this.produktID) {
+      this.update = true
+      this.setUpdate(this.produktID)
+    }
+  }
+
   createProduct() {
-    // let data = {
-    //   "name": this.name,
-    //   "default_price": this.default_price,
-    //   "description": this.description
-    // };
-    this.http.post("http://127.0.0.1:8000/products/", this.productFG.value).subscribe((resultData: any) => {
-      console.log(resultData);
-      alert("Sukses");
-      this.getAllProduct();
-    });
+    if(!this.update) {
+      this.http.post("http://127.0.0.1:8000/products/", this.productFG.value).subscribe((resultData: any) => {
+        console.log(resultData);
+        alert("Sukses");
+        this.getAllProduct();
+      });
+    }
+    else{
+      this.http.put("http://127.0.0.1:8000/productsUpdate/" + this.productFG.get("id")?.value, this.productFG.value).subscribe((resultData: any) => {
+        console.log(resultData);
+        alert("Sukses")
+        this.getAllProduct();
+      })
+    }
   }
 
   getAllProduct() {
@@ -41,44 +52,35 @@ export class ProdukteComponent {
     })
   }
 
-  setUpdate(data: any) {
-    // this.name = data.name
-    // this.default_price = data.default_price
-    // this.description = data.description
-    // this.produktID = data.id
-    this.productFG.patchValue(data)
-  }
-
-  updateProduct() {
-    // let data = {
-    //   "name": this.name,
-    //   "default_price": this.default_price,
-    //   "description": this.description
-    // }
-    this.http.put("http://127.0.0.1:8000/productsUpdate/" + this.productFG.get("id")?.value, this.productFG.value).subscribe((resultData: any) => {
-      console.log(resultData);
-      alert("Sukses")
-      // this.name = '';
-      // this.default_price = 0;
-      // this.description = '';
-      this.getAllProduct();
+  setUpdate(id: number) {
+    this.http.get(`http://127.0.0.1:8000/productsUpdate/${id}`).subscribe((resultData: any) => {
+      this.productFG.patchValue(resultData)
     })
   }
 
-  deleteProduct(data: any) {
-    this.http.delete("http://127.0.0.1:8000/productsUpdate/" + data.id).subscribe((resultData: any) => {
-      console.log(resultData);
-      alert("Sukses")
-      this.getAllProduct();
-    })
-  }
+  // updateProduct() {
+  //   this.http.put("http://127.0.0.1:8000/productsUpdate/" + this.productFG.get("id")?.value, this.productFG.value).subscribe((resultData: any) => {
+  //     console.log(resultData);
+  //     alert("Sukses")
+  //     this.getAllProduct();
+  //   })
+  // }
 
-  initProductForm(){
+  initProductForm() {
     this.productFG = this.fb.group({
       name: new FormControl(null),
       default_price: new FormControl(null),
       description: new FormControl(null),
       id: new FormControl(null),
     })
+  }
+
+  goTo() {
+    let url = this.router.url.substring(0, this.router.url.indexOf("?"))
+    this.router.navigateByUrl(url + "produkteList")
+  }
+
+  resetForm(){
+    this.productFG.reset()
   }
 }

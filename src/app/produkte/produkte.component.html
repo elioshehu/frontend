@@ -24,38 +24,10 @@
       </div>
 
       <button type="submit" class="btn btn-primary mt-4" (click)="createProduct()">Save</button> &nbsp;
-      <button type="submit" class="btn btn-warning mt-4" (click)="updateProduct()">Update</button>
+      <button type="submit" class="btn btn-warning mt-4" (click)="resetForm()">Cancel</button>
     </form>
   </div>
+  <button (click)="goTo()">Go to List</button>
 </div>
 
-<div>
-  <div class="container mt-4">
-    <h1>Products</h1>
-    <table class="table">
-      <thead>
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Default Price</th>
-        <th scope="col">Description</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let Product of ProdukteArray">
 
-        <td>{{Product.name}}</td>
-        <td>{{Product.default_price }}</td>
-        <td>{{Product.description }}</td>
-
-        <td>
-          <button type="button" class="btn btn-success" (click)="setUpdate(Product)">Edit</button>
-          <button type="button" class="btn btn-danger" (click)="deleteProduct(Product)">Delete</button>
-        </td>
-      </tr>
-
-      </tbody>
-    </table>
-
-
-  </div>
-</div>
